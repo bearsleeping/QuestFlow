@@ -1,0 +1,631 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quest | Panel Rejestru Czasu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.cdnfonts.com/css/product-sans" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+  <body>
+    <div class="lava-lamp" aria-hidden="true">
+      <span class="lava-lamp__blob lava-lamp__blob--1"></span>
+      <span class="lava-lamp__blob lava-lamp__blob--2"></span>
+      <span class="lava-lamp__blob lava-lamp__blob--3"></span>
+      <span class="lava-lamp__blob lava-lamp__blob--4"></span>
+      <span class="lava-lamp__blob lava-lamp__blob--5"></span>
+      <span class="lava-lamp__blob lava-lamp__blob--6"></span>
+      <span class="lava-lamp__blob lava-lamp__blob--7"></span>
+    </div>
+    <div class="bg-glow bg-glow--one"></div>
+    <div class="bg-glow bg-glow--two"></div>
+    <div class="bg-glow bg-glow--three"></div>
+    <div class="bg-glow bg-glow--four"></div>
+
+    <section id="authScreen" class="auth-screen">
+    <article class="auth-card">
+      <div class="auth-card__brand">
+        <div class="brand-mark" aria-label="Logo Quest">
+          <img src="assets/logo.jpg" alt="Quest logo" class="brand-mark__img" />
+        </div>
+        <div>
+          <h1>Quest</h1>
+          <p>Zaloguj się do swojego konta</p>
+        </div>
+      </div>
+
+      <form id="authForm" class="form-grid auth-form">
+        <label class="field-full">
+          Email
+          <input id="authEmailInput" type="email" autocomplete="email" required />
+        </label>
+        <label class="field-full">
+          Has?o
+          <input id="authPasswordInput" type="password" autocomplete="current-password" required />
+        </label>
+        <div class="auth-actions field-full">
+          <button id="authLoginBtn" class="primary-btn" type="submit">Zaloguj</button>
+          <button id="authRegisterBtn" class="ghost-btn" type="button">Utwórz konto</button>
+        </div>
+      </form>
+      <p id="authStatus" class="achievement-next">Sprawdzanie sesji...</p>
+    </article>
+  </section>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__header">
+        <div class="brand-mark" aria-label="Logo Quest">
+          <img src="assets/logo.jpg" alt="Quest logo" class="brand-mark__img" />
+        </div>
+        <div>
+          <h1>Quest</h1>
+          <p>System rejestru czasu</p>
+        </div>
+      </div>
+
+        <nav class="nav-list">
+          <button class="nav-item nav-item--active" type="button" data-view="main">Panel główny</button>
+          <button class="nav-item" type="button" data-view="progress">Postęp</button>
+          <button class="nav-item" type="button" data-view="planner">Planer</button>
+        </nav>
+
+      <div class="sidebar__foot">
+        <p>Postęp miesięczny</p>
+        <strong id="monthTotal">0 h</strong>
+      </div>
+
+      <section class="sidebar-account">
+        <p>Konto</p>
+        <div class="sidebar-account__actions">
+          <button id="editNicknameBtn" class="ghost-btn sidebar-edit-btn" type="button" hidden>Edytuj konto</button>
+            <button
+              id="topbarLogoutBtn"
+              class="danger-btn sidebar-power-btn"
+              type="button"
+              title="Wyloguj"
+              aria-label="Wyloguj"
+              hidden
+            >
+              <svg class="sidebar-power-btn__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3.25V10.5" />
+                <path d="M7.05 5.92a8.25 8.25 0 1 0 9.9 0" />
+              </svg>
+            </button>
+          </div>
+        </section>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar__left">
+          <button id="toggleSidebar" class="ghost-btn" type="button">Menu</button>
+          <div>
+            <h2>Dashboard</h2>
+            <p id="todayDate">-</p>
+          </div>
+        </div>
+      </header>
+
+      <section id="viewMain" class="view is-active">
+        <section class="profile-nav">
+          <div class="profile-chip">
+            <div id="mainProfileAvatar" class="profile-chip__avatar">DM</div>
+            <div>
+              <strong id="mainProfileName">Dominik</strong>
+              <p>Profil aktywny</p>
+            </div>
+          </div>
+          <div class="profile-progress">
+            <div class="profile-progress__top">
+              <span id="navUserLevel">Poziom 1</span>
+              <span id="navUserRank">Bronze</span>
+            </div>
+            <div class="profile-progress__bar">
+              <span id="navLevelProgressBar"></span>
+            </div>
+            <small id="navProgressMeta">0 / 120 EXP do następnego poziomu</small>
+          </div>
+        </section>
+
+        <section class="stats-grid">
+          <article class="stat-card">
+            <span>??cznie godzin</span>
+            <strong id="totalHours">0 h</strong>
+            <small>Cały zarejestrowany czas</small>
+          </article>
+          <article class="stat-card">
+            <span>Dzisiaj</span>
+            <strong id="todayHours">0 h</strong>
+            <small>Bieżący dzień</small>
+          </article>
+          <article class="stat-card">
+            <span>Wpisy</span>
+            <strong id="entryCount">0</strong>
+            <small>Zapisane sesje</small>
+          </article>
+          <article class="stat-card">
+            <span>?rednio / dzien</span>
+            <strong id="avgHours">0 h</strong>
+            <small>Dla dni aktywnych</small>
+          </article>
+        </section>
+
+        <section class="dashboard">
+          <div class="stack">
+            <article class="panel panel--glass work-panel" id="entryFormPanel">
+            <div class="panel__top work-panel__top">
+              <div class="work-panel__heading">
+                <h3>Dodaj wpis pracy</h3>
+                <p class="work-panel__subtitle">Szybki, czytelny formularz bez notatek.</p>
+              </div>
+              <span class="badge badge--dark">Rejestr czasu</span>
+            </div>
+            <div class="work-timer">
+              <div class="work-timer__top">
+                <p>Timer pracy</p>
+                <strong id="timerDisplay">00:00:00</strong>
+              </div>
+              <div class="timer-controls">
+                <button id="timerStartBtn" type="button" class="primary-btn">Start</button>
+                <button id="timerPauseBtn" type="button" class="ghost-btn" disabled>Pauza</button>
+                <button id="timerStopBtn" type="button" class="danger-btn" disabled>Stop</button>
+              </div>
+              <small id="timerStatus">Timer nieaktywny</small>
+            </div>
+
+            <form id="workForm" class="work-form">
+              <label class="work-field">
+                <span class="work-field__label">Data</span>
+                <span class="work-control">
+                  <input id="workDate" name="workDate" type="date" required />
+                  <span id="workDateDisplay" class="work-control__value">--.--.----</span>
+                  <span class="work-control__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <path d="M7 2v2M17 2v2M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" />
+                    </svg>
+                  </span>
+                </span>
+                <small id="autoDateText">-</small>
+              </label>
+              <label class="work-field">
+                <span class="work-field__label">Start</span>
+                <span class="work-control">
+                  <input id="startTime" name="startTime" type="time" required />
+                  <span id="startTimeDisplay" class="work-control__value">--:--</span>
+                  <span class="work-control__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <path d="M12 7v5l3 2M21 12a9 9 0 1 1-18 0a9 9 0 0 1 18 0Z" />
+                    </svg>
+                  </span>
+                </span>
+                <small>Godzina rozpoczęcia zmiany</small>
+              </label>
+              <label class="work-field">
+                <span class="work-field__label">Koniec</span>
+                <span class="work-control">
+                  <input id="endTime" name="endTime" type="time" required />
+                  <span id="endTimeDisplay" class="work-control__value">--:--</span>
+                  <span class="work-control__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                      <path d="M12 7v5l3 2M21 12a9 9 0 1 1-18 0a9 9 0 0 1 18 0Z" />
+                    </svg>
+                  </span>
+                </span>
+                <small>Godzina zakończenia zmiany</small>
+              </label>
+              <button type="submit" class="primary-btn work-submit-btn">Zapisz wpis</button>
+            </form>
+            </article>
+
+            <article class="panel panel--log entries-panel">
+              <div class="panel__top entries-panel__top">
+                <h3>Ostatnie wpisy</h3>
+                <div class="log-actions">
+                  <button id="clearAllBtn" class="danger-btn" type="button">Wyczyść wszystkie</button>
+                </div>
+              </div>
+              <ul id="entriesList" class="entries-v3-list"></ul>
+            </article>
+
+          </div>
+
+          <div class="stack stack--right">
+            <article class="panel">
+              <div class="panel__top">
+                <h3>Widok tygodniowy</h3>
+                <span class="badge badge--dark">Automatyczne podsumowanie</span>
+              </div>
+              <div id="weekBars" class="week-bars"></div>
+              <div class="insights-row">
+                <div>
+                  <p>Aktualna seria</p>
+                  <strong id="streakDays">0 dni</strong>
+                </div>
+                <div>
+                  <p>Ten mies"c</p>
+                  <strong id="monthHours">0 h</strong>
+                </div>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel__top">
+                <h3>Kalendarz miesięczny</h3>
+                <div class="calendar-actions">
+                  <button id="calendarPrevBtn" class="ghost-btn" type="button" aria-label="Poprzedni miesiąć">ďż˝</button>
+                  <button id="calendarAddBtn" class="ghost-btn" type="button" aria-label="Dodaj zakres">+</button>
+                  <span id="calendarMonthLabel" class="badge badge--dark">Mies"c</span>
+                  <button id="calendarNextBtn" class="ghost-btn" type="button" aria-label="Nastďż˝"pny miesiąc">ďż˝_</button>
+                </div>
+              </div>
+              <div id="calendarEventBox" class="calendar-event-box" hidden>
+                <div class="form-grid form-grid--compact">
+                  <label>
+                    Od
+                    <input id="calendarEventFrom" type="text" placeholder="rrrr-mm-dd" />
+                  </label>
+                  <label>
+                    Do
+                    <input id="calendarEventTo" type="text" placeholder="rrrr-mm-dd" />
+                  </label>
+                  <label>
+                    Typ
+                    <select id="calendarEventType">
+                      <option value="vacation">Urlop</option>
+                      <option value="off">Dzień wolny</option>
+                      <option value="l4">L4</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="log-actions">
+                  <button id="calendarEventSaveBtn" class="ghost-btn" type="button">Zapisz</button>
+                  <button id="calendarEventCancelBtn" class="danger-btn" type="button">Anuluj</button>
+                </div>
+              </div>
+              <div id="monthCalendar" class="month-calendar"></div>
+              <div class="calendar-legend">
+                <span><i class="dot dot--work"></i>Praca</span>
+                <span><i class="dot dot--vacation"></i>Urlop</span>
+                <span><i class="dot dot--off"></i>Swieto / wolne</span>
+                <span><i class="dot dot--l4"></i>L4</span>
+                <span><i class="dot dot--absent"></i>Brak pracy</span>
+              </div>
+            </article>
+
+          </div>
+        </section>
+      </section>
+
+      <section id="viewProgress" class="view">
+        <section class="profile-nav">
+          <div class="profile-chip">
+            <div id="progressProfileAvatar" class="profile-chip__avatar">DM</div>
+            <div>
+              <strong id="progressProfileName">Dominik</strong>
+              <p>Panel postępu</p>
+            </div>
+          </div>
+          <div class="profile-progress">
+            <div class="profile-progress__top">
+              <span id="progressNavUserLevel">Poziom 1</span>
+              <span id="progressNavUserRank">Bronze 1</span>
+            </div>
+            <div class="profile-progress__bar">
+              <span id="progressNavLevelProgressBar"></span>
+            </div>
+            <small id="progressNavProgressMeta">0 / 120 EXP do następnego poziomu</small>
+          </div>
+        </section>
+
+        <section class="dashboard dashboard--progress">
+          <div class="stack">
+            <article class="panel">
+              <div class="panel__top">
+                <h3>Statystyki profilu</h3>
+                <span class="badge badge--dark">Profil</span>
+              </div>
+              <div class="stats-grid stats-grid--compact">
+                <article class="stat-card">
+                  <span>Poziom profilu</span>
+                  <strong id="progressProfileLevel">1</strong>
+                </article>
+                <article class="stat-card">
+                  <span>Poziom rangi</span>
+                  <strong id="progressRankLevel">Bronze 1</strong>
+                </article>
+                <article class="stat-card">
+                  <span>EXP</span>
+                  <strong id="progressExp">0 EXP</strong>
+                </article>
+                <article class="stat-card">
+                  <span>Wpisy</span>
+                  <strong id="progressEntries">0</strong>
+                </article>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel__top">
+                <h3>Osiągnięcia</h3> poziomu</h3>
+                <span class="badge badge--dark">Level rewards</span>
+              </div>
+              <p id="nextAchievement" class="achievement-next">Następne osiągnięcie: brak</p>
+              <p id="rewardBank" class="achievement-next">Bank nagrod: +0 EXP</p>
+              <ul id="achievementsList" class="achievements-list"></ul>
+            </article>
+
+          </div>
+
+          <div class="stack stack--right">
+            <article class="panel">
+              <div class="panel__top">
+                <h3>Podsumowanie miesięczne</h3>
+                <span class="badge badge--dark">miesiąc</span>
+              </div>
+              <div class="insights-row">
+                <div>
+                  <p>Postęp miesięczny</p>
+                  <strong id="progressMonthTotal">0 h</strong>
+                </div>
+                <div>
+                  <p>Poprzedni / Dzień</p>
+                  <strong id="progressAvgHours">0 h</strong>
+                </div>
+              </div>
+            </article>
+
+            <article class="panel panel--earnings">
+              <div class="panel__top">
+                <h3>Szacunkowe zarobki</h3>
+                <span id="earningsRateBadge" class="badge badge--dark">31,40 PLN/h</span>
+              </div>
+              <p class="earnings-intro">
+                Minimalna stawka godzinowa i uproszczony podgląd po PIT.
+              </p>
+              <div class="earnings-grid">
+                <article class="stat-card earnings-card">
+                  <span>Ten miesiąc brutto</span>
+                  <strong id="earningsMonthGross">0 PLN</strong>
+                  <small>Na podstawie godzin z tego miesiąca</small>
+                </article>
+                <article class="stat-card earnings-card">
+                  <span>Ten miesiąc po PIT</span>
+                  <strong id="earningsMonthNet">0 PLN</strong>
+                  <small id="earningsModeLabel">Tryb: standardowy PIT</small>
+                </article>
+                <article class="stat-card earnings-card">
+                  <span>Ten rok brutto</span>
+                  <strong id="earningsYearGross">0 PLN</strong>
+                  <small>Bieżący rok kalendarzowy</small>
+                </article>
+                <article class="stat-card earnings-card">
+                  <span>Ten rok po PIT</span>
+                  <strong id="earningsYearNet">0 PLN</strong>
+                  <small>Szacunek uproszczony</small>
+                </article>
+              </div>
+              <p id="earningsHint" class="earnings-hint">
+                Szacunek nie uwzględnia ZUS, kosztów uzyskania przychodu ani indywidualnych wyjątków.
+              </p>
+            </article>
+
+            <article class="panel panel--rank">
+              <div class="panel__top">
+                <h3>Postęp poziomu i rangi</h3>
+                <span class="badge badge--dark">Ranking</span>
+              </div>
+              <div id="rankBox" class="rank-minimal-box">
+                <div class="rank-minimal__top">
+                  <p>Aktualna ranga</p>
+                  <strong id="userRankLevel">Bronze 1</strong>
+                </div>
+                <p id="userRank" class="rank-minimal__name">Bronze</p>
+                <div class="rank-minimal__bar">
+                  <span id="rankProgressBar"></span>
+                </div>
+                <div class="rank-minimal__meta">
+                  <small id="rankMeta">Poziom rangi: 1/2 | 0%</small>
+                  <small id="nextRank">Następna: Silver | lvl 4</small>
+                </div>
+                <ul id="rankSteps" class="rank-minimal__track"></ul>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel__top">
+                <h3>Ranking użytkowników</h3>
+                <span class="badge badge--dark">Global</span>
+              </div>
+              <p id="leaderboardStatus" class="achievement-next">Odświeżanie rankingu...</p>
+              <div class="leaderboard-wrap">
+                <table class="leaderboard-table">
+                  <thead>
+                    <tr>
+                      <th>-</th>
+                      <th>Użytkownik</th>
+                      <th>Poziom</th>
+                      <th>Ranga</th>
+                      <th>EXP</th>
+                      <th>Godziny</th>
+                    </tr>
+                  </thead>
+                  <tbody id="leaderboardBody"></tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+        </section>
+      </section>
+
+        <section id="viewPlanner" class="view">
+          <section class="profile-nav">
+            <div class="profile-chip">
+              <div id="plannerProfileAvatar" class="profile-chip__avatar">DM</div>
+              <div>
+                <strong id="plannerProfileName">Dominik</strong>
+                <p>Planowanie zadań i wspólna tablica</p>
+              </div>
+            </div>
+            <div class="planner-status-chip">
+              <span class="badge badge--dark">Planer</span>
+              <small id="plannerStatus">Ładowanie tablicy notatek...</small>
+            </div>
+          </section>
+
+          <section class="dashboard dashboard--planner">
+            <div class="stack">
+              <article class="panel planner-form-panel">
+                <div class="panel__top">
+                  <h3>Dodaj zadanie</h3>
+                  <span class="badge badge--dark">Planowanie</span>
+                </div>
+                <p class="planner-intro">
+                  Zaplanuj zadanie na konkretny dzień albo na cały zakres dni. Zadania oznaczone jako ważne są przypinane wyżej.
+                </p>
+                <form id="plannerForm" class="planner-form">
+                  <label class="planner-field">
+                    <span>Tytuł</span>
+                    <input id="plannerTitleInput" type="text" maxlength="80" placeholder="Np. Zamówienie towaru lub grafiki na weekend" required />
+                  </label>
+                  <div class="planner-date-row">
+                    <label class="planner-field">
+                      <span>Od kiedy</span>
+                      <input id="plannerStartDateInput" type="date" required />
+                    </label>
+                    <label class="planner-field">
+                      <span>Do kiedy</span>
+                      <input id="plannerEndDateInput" type="date" required />
+                    </label>
+                  </div>
+                  <label class="planner-field">
+                    <span>Szczegóły</span>
+                    <textarea id="plannerContentInput" rows="7" placeholder="Dodaj opis zadania, priorytet albo krótką wiadomość dla zespołu..." required></textarea>
+                  </label>
+                  <div class="planner-form__row">
+                    <label class="planner-check" for="plannerPinnedInput">
+                      <input id="plannerPinnedInput" type="checkbox" />
+                      <span class="planner-check__box" aria-hidden="true">
+                        <span class="planner-check__mark"></span>
+                      </span>
+                      <span class="planner-check__label">Oznacz jako ważne</span>
+                    </label>
+                    <button id="plannerSubmitBtn" class="primary-btn" type="submit">Dodaj zadanie</button>
+                  </div>
+                </form>
+              </article>
+              <article class="panel planner-board-panel">
+                <div class="panel__top">
+                  <h3>Lista zadań</h3>
+                  <div class="log-actions">
+                    <button id="plannerRefreshBtn" class="ghost-btn" type="button">Odśwież</button>
+                  </div>
+                </div>
+                <ul id="plannerNotesList" class="planner-board"></ul>
+              </article>
+            </div>
+
+            <div class="stack stack--right">
+              <article class="panel planner-calendar-panel">
+                <div class="panel__top">
+                  <h3>Kalendarz zadań</h3>
+                  <div class="planner-calendar-nav">
+                    <button id="plannerCalendarPrevBtn" class="ghost-btn planner-calendar-nav__btn" type="button" aria-label="Poprzedni miesiąc">←</button>
+                    <strong id="plannerCalendarMonthLabel">-</strong>
+                    <button id="plannerCalendarNextBtn" class="ghost-btn planner-calendar-nav__btn" type="button" aria-label="Następny miesiąc">→</button>
+                  </div>
+                </div>
+                <div id="plannerCalendarGrid" class="planner-calendar-grid"></div>
+                <section class="planner-agenda-panel">
+                  <div class="planner-agenda-panel__top">
+                    <strong id="plannerSelectedDateLabel">-</strong>
+                    <span id="plannerSelectedDateMeta">0 zadań</span>
+                  </div>
+                  <ul id="plannerDayAgenda" class="planner-day-agenda"></ul>
+                </section>
+              </article>
+            </div>
+          </section>
+        </section>
+
+    </main>
+
+    <nav class="mobile-tabbar" aria-label="Nawigacja mobilna">
+      <button class="nav-item mobile-tabbar__item nav-item--active" type="button" data-view="main">
+        <span class="mobile-tabbar__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M4.75 10.5 12 4.75l7.25 5.75v8a1.5 1.5 0 0 1-1.5 1.5h-3.5v-5h-4.5v5h-3.5a1.5 1.5 0 0 1-1.5-1.5z" />
+          </svg>
+        </span>
+        <span class="mobile-tabbar__label">Główna</span>
+      </button>
+      <button class="nav-item mobile-tabbar__item" type="button" data-view="progress">
+        <span class="mobile-tabbar__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M5 18.25h14" />
+            <path d="M7.25 15.25V12.5" />
+            <path d="M12 15.25V8.25" />
+            <path d="M16.75 15.25V5.75" />
+          </svg>
+        </span>
+        <span class="mobile-tabbar__label">Postęp</span>
+      </button>
+      <button class="nav-item mobile-tabbar__item" type="button" data-view="planner">
+        <span class="mobile-tabbar__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M7.25 4.75v3" />
+            <path d="M16.75 4.75v3" />
+            <path d="M4.75 9.25h14.5" />
+            <rect x="4.75" y="6.75" width="14.5" height="12.5" rx="2.25" />
+          </svg>
+        </span>
+        <span class="mobile-tabbar__label">Planer</span>
+      </button>
+    </nav>
+  </div>
+
+  <section id="accountEditor" class="account-modal" hidden>
+    <article class="account-editor">
+      <div class="panel__top">
+        <h3>Edycja profilu</h3>
+        <button id="accountCloseBtn" class="ghost-btn" type="button" aria-label="Zamknij">ďż˝["</button>
+      </div>
+      <div id="accountAvatarPreview" class="account-avatar-preview">Podglďż˝&d</div>
+      <div class="account-file-row">
+        <input id="accountAvatarFileInput" class="account-file-input" type="file" accept="image/*" />
+        <button id="accountFileTriggerBtn" class="ghost-btn" type="button">Wybierz zdjďż˝"cie</button>
+      </div>
+      <label>
+        Nazwa profilu
+        <input id="accountNicknameInput" type="text" maxlength="24" placeholder="Nazwa profilu" />
+      </label>
+      <section class="account-setting">
+        <div class="account-setting__content">
+          <strong>Ulga dla młodych</strong>
+          <p>Włącz, jeśli masz mniej niż 26 lat. Zmienia tylko uproszczony szacunek PIT w zakładce Postęp.</p>
+        </div>
+        <label class="toggle-switch" for="accountUnder26Toggle" aria-label="Ulga dla młodych">
+          <input id="accountUnder26Toggle" type="checkbox" />
+          <span class="toggle-switch__track">
+            <span class="toggle-switch__thumb"></span>
+          </span>
+        </label>
+      </section>
+      <input id="accountAvatarUrlInput" type="hidden" />
+      <div class="account-editor__actions">
+        <button id="accountSaveBtn" class="primary-btn" type="button">Zapisz</button>
+        <button id="accountCancelBtn" class="ghost-btn" type="button">Anuluj</button>
+      </div>
+    </article>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.config.js"></script>
+  <script src="Engin.js"></script>
+</body>
+</html>
